@@ -22,10 +22,10 @@ class Distances:
         Integral= simpson(fx, xx)
         return Integral
     
-    def comoving_distance(self, z):
+    def comoving_distance(self, z,w0=-1,wa=0):
         #calcola la distanza comoving in Mpc(float) dato un redshift
         def fx(x):
-            return c/(1000*self.hubble_function(x))
+            return c/(1000*self.hubble_function(x,w0,wa))
         Integral=quad(fx, 0, z)[0]
         return Integral
     
@@ -39,8 +39,15 @@ class Distances:
     
     def v_distance(self, z, w0=-1,wa=0):
         #calcola la distanza luminosa in Mpc(float) dato un redshift
-        return (z*self.comoving_distance(z)*self.comoving_distance(z)*c/(1000*self.hubble_function(z,w0,wa)))**(1/3)
+        return (z*self.comoving_distance(z,w0,wa)*self.comoving_distance(z,w0,wa)*c/(1000*self.hubble_function(z,w0,wa)))**(1/3)
+    
+    def m_distance(self, z, w0=-1,wa=0):
+        #calcola la distanza luminosa in Mpc(float) dato un redshift
+        return (self.comoving_distance(z,w0,wa))
         
+    def h_distance(self, z, w0=-1,wa=0):
+        #calcola la distanza luminosa in Mpc(float) dato un redshift
+        return c/(1000*self.hubble_function(z,w0,wa))
     
     def distance_modulus(self, z):
         #calcola il modulo di distanza dato un redshift
